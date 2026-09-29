@@ -1,0 +1,13 @@
+import java.util.ArrayList;
+public class Main{
+  public static void main(string[] args){
+    ArrayList<String> cars= new ArrayList<String>();
+    cars.add("Volvo");
+    cars.add("BMW");
+    cars.add("Frod");
+    cars.add("Mazda");
+    for(int i=0; i<cars.size();i++){
+       System.out.println(cars.get(i));
+    }
+  }
+}
