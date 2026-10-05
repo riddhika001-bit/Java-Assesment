@@ -44,6 +44,10 @@ For online hosting, use a reachable hosted MySQL database and configure:
 
 Set these as secret environment variables in your hosting provider, use HTTPS, and never put credentials in source code or commit them to GitHub. The database must exist before the web app starts. This project is an educational example; do not use it to store real patient or other regulated health data without a professional security and privacy review.
 
+## Deploy on Render
+
+The repository-root `render.yaml` defines a Docker web service with a persistent 1 GB disk for the embedded database. In Render, create a Blueprint from this repository and select the `Riddhika_mini_project` branch. Render will create the service and generate a private web-login password. The Blueprint uses Render's paid Starter web-service plan because a persistent disk is required; check Render's current pricing before confirming. After deployment, open the service's **Environment** settings to retrieve the generated `HOSPITAL_WEB_PASSWORD`. Sign in with username `admin`. Keep the disk attached when redeploying so patient records are retained.
+
 ## Console app
 
 The original Java console app remains in `src/`. Open the repository in VS Code and run `Main.java`; configure `HOSPITAL_DB_USER` and `HOSPITAL_DB_PASSWORD` first. Add MySQL Connector/J to `lib/` if you want to run the console app.

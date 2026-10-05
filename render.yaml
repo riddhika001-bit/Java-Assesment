@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: carepoint-hospital
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./webapp/Dockerfile
+    dockerContext: ./webapp
+    healthCheckPath: /login
+    envVars:
+      - key: HOSPITAL_WEB_USER
+        value: admin
+      - key: HOSPITAL_WEB_PASSWORD
+        generateValue: true
+    disk:
+      name: carepoint-data
+      mountPath: /app/data
+      sizeGB: 1
