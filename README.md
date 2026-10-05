@@ -13,33 +13,17 @@ A Java hospital management project with a console application and a browser-base
 
 ## Run the website locally
 
-Requirements: JDK 21, Maven 3.9+, and MySQL 8 running locally.
+Requirements: JDK 21 and Maven 3.9+. The local launcher uses an embedded file-based database, so no MySQL installation or database password is required.
 
-1. Create the database once in MySQL:
+In PowerShell, from the project folder, run:
 
-   ```sql
-   CREATE DATABASE hospital_management;
-   ```
+```powershell
+.\webapp\run-local.ps1
+```
 
-2. Set the MySQL login in PowerShell:
+Open [http://localhost:8080](http://localhost:8080). The launcher creates a random login the first time, prints it in PowerShell, and saves it in an ignored local-only file so the login stays the same when restarted. Patient and doctor records are stored under `webapp/data/` and persist across restarts. Leave the PowerShell window open while using the site; press `Ctrl+C` there to stop it.
 
-   ```powershell
-   $env:HOSPITAL_DB_USER = "your-mysql-username"
-   $env:HOSPITAL_DB_PASSWORD = "your-mysql-password"
-   $env:HOSPITAL_WEB_USER = "admin"
-   $env:HOSPITAL_WEB_PASSWORD = "a-strong-password-at-least-12-characters"
-   ```
-
-3. Start the web app:
-
-   ```powershell
-   cd webapp
-   mvn spring-boot:run
-   ```
-
-4. Open [http://localhost:8080](http://localhost:8080).
-
-The web app creates the patient, doctor, treatment queue, and discharge history tables and adds the default doctors at startup. Sign-in is required; configure `HOSPITAL_WEB_USER` and a strong `HOSPITAL_WEB_PASSWORD` of at least 12 characters. The web login is kept in application memory. You can configure a hosted MySQL database with `SPRING_DATASOURCE_URL`, `HOSPITAL_DB_USER`, and `HOSPITAL_DB_PASSWORD`. The server port can be set with `PORT`.
+The local launcher binds to this PC only. The web app creates the patient, doctor, treatment queue, and discharge history tables and adds the default doctors at startup. Sign-in is required. You can connect to hosted MySQL instead by setting `SPRING_DATASOURCE_URL`, `HOSPITAL_DB_USER`, and `HOSPITAL_DB_PASSWORD`. The server port can be set with `PORT`.
 
 ## Deploy with Docker
 
@@ -49,7 +33,7 @@ The Dockerfile is in `webapp/`. Build from the repository root:
 docker build -t hospital-management-web ./webapp
 ```
 
-Run the image with a reachable MySQL database and configure:
+For online hosting, use a reachable hosted MySQL database and configure:
 
 - `SPRING_DATASOURCE_URL`: JDBC URL for the database, for example `jdbc:mysql://db-host:3306/hospital_management?useSSL=true&serverTimezone=UTC`
 - `HOSPITAL_DB_USER`: database username

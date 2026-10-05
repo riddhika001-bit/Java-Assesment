@@ -1,4 +1,6 @@
 bin/
 *.class
 webapp/target/
+webapp/data/
+webapp/.local-login
 .env
