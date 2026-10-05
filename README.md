@@ -1,43 +1,73 @@
 # Hospital Management System
 
-A Java console application for managing hospital patients, treatment queues, and doctor assignments. Patient and doctor records are stored in MySQL.
+A Java hospital management project with a console application and a browser-based Spring Boot web app. Both use MySQL patient and doctor records.
 
-## Features
+## Web app features
 
-- Add, view, search, update, sort, and discharge patients
-- Prioritize patients in the treatment queue by severity
-- Undo the most recent discharge
-- Assign doctors by department using round-robin rotation and view doctor workloads
-- Create the database and tables automatically when the application starts
+- Register, search, update, sort, and discharge patients
+- Queue patients for treatment by severity, with critical cases first
+- Assign the next patient to a doctor and track doctor workloads
+- Undo the last patient discharge
+- Responsive dashboard for desktop and mobile
+- Docker image for deployment
 
-## Requirements
+## Run the website locally
 
-- Java Development Kit (JDK)
-- MySQL Server running locally on port `3306`
-- MySQL Connector/J
-- Visual Studio Code with the Extension Pack for Java (optional)
+Requirements: JDK 21, Maven 3.9+, and MySQL 8 running locally.
 
-## Setup
+1. Create the database once in MySQL:
 
-1. Clone or download this repository.
-2. Place the MySQL Connector/J `.jar` file in the project's `lib` directory. The VS Code project settings load JAR files from this directory.
-3. Set the database credentials in your environment. The application reads `HOSPITAL_DB_USER` and `HOSPITAL_DB_PASSWORD`; it does not contain a database password.
+   ```sql
+   CREATE DATABASE hospital_management;
+   ```
 
-   In PowerShell, for the current terminal:
+2. Set the MySQL login in PowerShell:
 
    ```powershell
    $env:HOSPITAL_DB_USER = "your-mysql-username"
    $env:HOSPITAL_DB_PASSWORD = "your-mysql-password"
+   $env:HOSPITAL_WEB_USER = "admin"
+   $env:HOSPITAL_WEB_PASSWORD = "a-strong-password-at-least-12-characters"
    ```
 
-4. Open the project folder in VS Code and run `Main.java`.
+3. Start the web app:
 
-On startup, the application creates the `hospital_management` database and the required tables if they do not exist. The MySQL account must have permission to create databases and tables.
+   ```powershell
+   cd webapp
+   mvn spring-boot:run
+   ```
 
-## Project layout
+4. Open [http://localhost:8080](http://localhost:8080).
+
+The web app creates the patient, doctor, treatment queue, and discharge history tables and adds the default doctors at startup. Sign-in is required; configure `HOSPITAL_WEB_USER` and a strong `HOSPITAL_WEB_PASSWORD` of at least 12 characters. The web login is kept in application memory. You can configure a hosted MySQL database with `SPRING_DATASOURCE_URL`, `HOSPITAL_DB_USER`, and `HOSPITAL_DB_PASSWORD`. The server port can be set with `PORT`.
+
+## Deploy with Docker
+
+The Dockerfile is in `webapp/`. Build from the repository root:
+
+```powershell
+docker build -t hospital-management-web ./webapp
+```
+
+Run the image with a reachable MySQL database and configure:
+
+- `SPRING_DATASOURCE_URL`: JDBC URL for the database, for example `jdbc:mysql://db-host:3306/hospital_management?useSSL=true&serverTimezone=UTC`
+- `HOSPITAL_DB_USER`: database username
+- `HOSPITAL_DB_PASSWORD`: database password
+- `HOSPITAL_WEB_USER`: sign-in username
+- `HOSPITAL_WEB_PASSWORD`: sign-in password (at least 12 characters)
+- `PORT`: optional HTTP port (defaults to `8080`)
+
+Set these as secret environment variables in your hosting provider, use HTTPS, and never put credentials in source code or commit them to GitHub. The database must exist before the web app starts. This project is an educational example; do not use it to store real patient or other regulated health data without a professional security and privacy review.
+
+## Console app
+
+The original Java console app remains in `src/`. Open the repository in VS Code and run `Main.java`; configure `HOSPITAL_DB_USER` and `HOSPITAL_DB_PASSWORD` first. Add MySQL Connector/J to `lib/` if you want to run the console app.
+
+## Repository layout
 
 ```text
-src/        Java source files
-lib/        MySQL Connector/J dependency (add locally)
-bin/        Compiled output (generated; not committed)
+src/       Original console app sources
+webapp/    Spring Boot website, MySQL schema, and Dockerfile
+lib/       Optional local Connector/J dependency for the console app
 ```

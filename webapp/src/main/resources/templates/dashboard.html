@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CarePoint | Hospital Management</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="/">
+        <span class="brand-mark">+</span>
+        <span>CarePoint<small>HOSPITAL MANAGEMENT</small></span>
+    </a>
+    <nav aria-label="Main navigation">
+        <a href="#patients">Patients</a>
+        <a href="#treatment-queue">Treatment queue</a>
+        <a href="#doctors">Doctors</a>
+    </nav>
+</header>
+
+<main class="page">
+    <section class="welcome">
+        <div>
+            <p class="eyebrow">HOSPITAL OVERVIEW</p>
+            <h1>Good care starts here.</h1>
+            <p class="subtitle">Manage patient records, treatment priority, and doctor workloads.</p>
+        </div>
+        <a class="button primary" href="#add-patient">＋ Add patient</a>
+    </section>
+
+    <div class="notice success" role="status" th:if="${successMessage}" th:text="${successMessage}"></div>
+    <div class="notice error" role="alert" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+    <section class="stats" aria-label="Hospital statistics">
+        <article class="stat-card">
+            <span class="stat-icon blue">♙</span>
+            <div><p>Total patients</p><strong th:text="${patientCount}">0</strong></div>
+        </article>
+        <article class="stat-card">
+            <span class="stat-icon red">♥</span>
+            <div><p>Critical patients</p><strong th:text="${criticalCount}">0</strong></div>
+        </article>
+        <article class="stat-card">
+            <span class="stat-icon green">✚</span>
+            <div><p>Doctors on roster</p><strong th:text="${#lists.size(doctors)}">0</strong></div>
+        </article>
+        <article class="stat-card">
+            <span class="stat-icon violet">◷</span>
+            <div><p>Waiting for treatment</p><strong th:text="${#lists.size(queue)}">0</strong></div>
+        </article>
+    </section>
+
+    <section class="panel" id="add-patient">
+        <div class="section-heading">
+            <div><p class="eyebrow">PATIENT REGISTRATION</p><h2>Add a patient</h2></div>
+        </div>
+        <form class="patient-form" th:action="@{/patients}" method="post" th:object="${patientForm}">
+            <label>Patient name
+                <input type="text" th:field="*{name}" maxlength="50" placeholder="e.g. Asha Patel" required>
+                <small class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+            </label>
+            <label>Age
+                <input type="number" th:field="*{age}" min="1" max="119" placeholder="Age" required>
+                <small class="field-error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></small>
+            </label>
+            <label>Disease / condition
+                <input type="text" th:field="*{disease}" maxlength="50" placeholder="e.g. chest pain" required>
+                <small class="field-error" th:if="${#fields.hasErrors('disease')}" th:errors="*{disease}"></small>
+            </label>
+            <label>Severity
+                <select th:field="*{severity}">
+                    <option value="1">Critical</option>
+                    <option value="2">Moderate</option>
+                    <option value="3">Normal</option>
+                </select>
+            </label>
+            <button class="button primary form-button" type="submit">Register patient</button>
+        </form>
+    </section>
+
+    <section class="panel" id="patients">
+        <div class="section-heading">
+            <div><p class="eyebrow">PATIENT RECORDS</p><h2>Patients</h2></div>
+            <form class="search-form" action="/" method="get">
+                <label class="sr-only" for="search">Search patients</label>
+                <input id="search" name="search" type="search" th:value="${search}" placeholder="Search name or condition">
+                <button class="button secondary" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr><th>ID</th><th>Patient</th><th>Age</th><th>Condition</th><th>Severity</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="patient : ${patients}">
+                    <td class="muted" th:text="'#' + ${patient.id}">#101</td>
+                    <td class="patient-name" th:text="${patient.name}">Patient</td>
+                    <td th:text="${patient.age}">0</td>
+                    <td th:text="${patient.disease}">Condition</td>
+                    <td><span class="badge"
+                              th:classappend="${patient.severity == 1 ? ' critical' : (patient.severity == 2 ? ' moderate' : ' normal')}"
+                              th:text="${patient.severityLabel()}">Normal</span></td>
+                    <td class="actions">
+                        <details class="edit-details">
+                            <summary>Edit</summary>
+                            <form class="inline-edit" th:action="@{/patients/{id}/update(id=${patient.id})}" method="post">
+                                <input name="disease" th:value="${patient.disease}" maxlength="50" aria-label="Condition" required>
+                                <select name="severity" aria-label="Severity">
+                                    <option value="1" th:selected="${patient.severity == 1}">Critical</option>
+                                    <option value="2" th:selected="${patient.severity == 2}">Moderate</option>
+                                    <option value="3" th:selected="${patient.severity == 3}">Normal</option>
+                                </select>
+                                <button class="button secondary small" type="submit">Save</button>
+                            </form>
+                        </details>
+                        <form th:action="@{/patients/{id}/queue(id=${patient.id})}" method="post">
+                            <button class="text-button" type="submit">Add to queue</button>
+                        </form>
+                        <form th:action="@{/patients/{id}/discharge(id=${patient.id})}" method="post">
+                            <button class="text-button danger-text" type="submit">Discharge</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(patients)}">
+                    <td colspan="6" class="empty">No patients found. Register a patient above to get started.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <a class="sort-link" th:href="@{/(search=${search},sort=${!sort})}"
+           th:text="${sort ? 'Show registration order' : 'Sort alphabetically by name'}">Sort alphabetically by name</a>
+    </section>
+
+    <section class="lower-grid">
+        <section class="panel" id="treatment-queue">
+            <div class="section-heading">
+                <div><p class="eyebrow">PRIORITY CARE</p><h2>Treatment queue</h2></div>
+                <form th:action="@{/queue/treat-next}" method="post" th:if="${!#lists.isEmpty(queue)}">
+                    <button class="button primary" type="submit">Treat next patient</button>
+                </form>
+            </div>
+            <p class="helper">Critical cases are shown first; ties follow registration in the queue.</p>
+            <ol class="queue-list" th:if="${!#lists.isEmpty(queue)}">
+                <li th:each="patient : ${queue}">
+                    <span class="queue-number" th:text="${patientStat.count}">1</span>
+                    <span class="queue-patient"><strong th:text="${patient.name}">Patient</strong><small th:text="${patient.disease}">Condition</small></span>
+                    <span class="badge"
+                          th:classappend="${patient.severity == 1 ? ' critical' : (patient.severity == 2 ? ' moderate' : ' normal')}"
+                          th:text="${patient.severityLabel()}">Normal</span>
+                </li>
+            </ol>
+            <p class="empty" th:if="${#lists.isEmpty(queue)}">No patients are waiting for treatment.</p>
+        </section>
+
+        <section class="panel" id="doctors">
+            <div class="section-heading">
+                <div><p class="eyebrow">CARE TEAM</p><h2>Doctors &amp; workload</h2></div>
+            </div>
+            <div class="doctor-list">
+                <article class="doctor-row" th:each="doctor : ${doctors}">
+                    <span class="doctor-avatar" th:text="${#strings.substring(doctor.name, 4, 5)}">D</span>
+                    <span class="doctor-info"><strong th:text="${doctor.name}">Doctor</strong><small th:text="${doctor.department}">Department</small></span>
+                    <span class="workload"><strong th:text="${doctor.patientsTreated}">0</strong><small>treated</small></span>
+                </article>
+            </div>
+        </section>
+    </section>
+
+    <section class="undo-row">
+        <span>Discharged the wrong patient?</span>
+        <form th:action="@{/discharges/undo}" method="post">
+            <button class="text-button" type="submit">Undo last discharge</button>
+        </form>
+    </section>
+</main>
+<footer>CarePoint Hospital Management <span>•</span> Patient care, organized.</footer>
+</body>
+</html>
