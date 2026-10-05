@@ -1,21 +1,21 @@
 # Java Assessment
 ### Assessment 1
-[write a java code to store the population of India and China and print the population](.java)
+[write a java code to store the population of India and China and print the population](Population.java)
 
 ### Assessment 2
-[write a java code to calculate the area of circle](.java)
+[write a java code to calculate the area of circle](Circle.java)
 
 ### Assessment 3
-[write a java code to assign grade A for the student who have the marks above 90 check if a student has passed the exam or not(pass marksis 70)](.java)
+[write a java code to assign grade A for the student who have the marks above 90 check if a student has passed the exam or not(pass marksis 70)](Grade.java)
 
 ### Assessment 4
-[java code for simple calculator](.java)
+[java code for simple calculator](Calculator.java)
 
 ### Assessment 5
-[find the sum and average of the array in java](.java)
+[find the sum and average of the array in java](Array.java)
 
 ### Assessment 6
-[java code for adding rows in matrix](.java)
+[java code for adding rows in matrix](Matrix.java)
 
 ### Assessment 7
 [write a code by using 3 methods of string in java](.java)
@@ -24,19 +24,19 @@
 [write  a java code by spliting a sentence  into word and then rebuilt it in new forma](.java)
 
 ### Assessment 9
-[java code for fibonacci with recursion](.java)
+[java code for fibonacci with recursion](Fibinacci.java)
 
 ### Assessment 10
-[write java code for selection sort and insertion sor](.java)
+[write java code for selection sort and insertion sor](Insertion.java)
 
 ### Assessment 11
-[java code for counting vowels in string](.java)
+[java code for counting vowels in string](Vowel.java)
 
 ### Assessment 12
 [java code for reversing an array in place](.java)
 
 ### Assessment 13
-[java code for 2nd largest element](.java)
+[java code for 2nd largest element](SecondLargest.java)
 
 ### Assessment 14
 [write a java code to create hierarchy with class animal subclass dog,forrabbit](.java)
@@ -45,22 +45,22 @@
 [write java code for method overidding a string where each class inherts to string from object and overiddibg that to see how the object can be printed](.java)
 
 ### Assessment 16
-[write a java code to implement the abraction by using shapes and 2 sub classes which can have the fuctionality in different ways](.java)
+[write a java code to implement the abraction by using shapes and 2 sub classes which can have the fuctionality in different ways](Shapes.java)
 
 ### Assessment 17
-[java code for managing a To Do list adding removing and iterating over a simple arraylist of tasks](.java)
+[java code for managing a To Do list adding removing and iterating over a simple arraylist of tasks](JavaArrayList.java)
 
 ### Assessment 18
-[java code for accessing and removing elements in a linkedlist by using its operations](.java)
+[java code for accessing and removing elements in a linkedlist by using its operations](LinkedList.java)
 
 ### Assessment 19
-[write a java code by using try,catch,finally,block for any arthimetic exception or array index out of bound exception](.java)
+[write a java code by using try,catch,finally,block for any arthimetic exception or array index out of bound exception](TryCatchFinally.java)
 
 ### Assessment 20
 [java code for finding the largest element in an array](.java)
 
 ### Assessment 21
-[java code for create a class which can shared by two objects(student) for name and marks in a subject](.java)
+[java code for create a class which can shared by two objects(student) for name and marks in a subject](Student.java)
 
 ### Assessment 22
 [given an array of integers return the number of distinct absolute values among the elements of the array absolute of any value is defined as its positive equivalent ABS(-5)=505 MATHEMATICALLY |-5|=|5|=1](.java)
