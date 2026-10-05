@@ -48,6 +48,15 @@ Set these as secret environment variables in your hosting provider, use HTTPS, a
 
 The repository-root `render.yaml` defines a Docker web service with a persistent 1 GB disk for the embedded database. In Render, create a Blueprint from this repository and select the `Riddhika_mini_project` branch. Render will create the service and generate a private web-login password. The Blueprint uses Render's paid Starter web-service plan because a persistent disk is required; check Render's current pricing before confirming. After deployment, open the service's **Environment** settings to retrieve the generated `HOSPITAL_WEB_PASSWORD`. Sign in with username `admin`. Keep the disk attached when redeploying so patient records are retained.
 
+## Deploy the shared app on Netlify
+
+Netlify serves the static frontend in `netlify-app`; the Java/Spring Boot server cannot run on Netlify. In Netlify, connect this repository and set the production branch to `Riddhika_mini_project`. The root [`netlify.toml`](./netlify.toml) configures the build automatically. Create a Supabase project, open its SQL Editor, and run [`netlify-app/supabase/schema.sql`](./netlify-app/supabase/schema.sql). In Supabase Authentication settings, disable public sign-ups and create/invite accounts only for authorized hospital staff. Then add these environment variables in Netlify site settings and redeploy:
+
+- `VITE_SUPABASE_URL`: the project's Supabase URL
+- `VITE_SUPABASE_ANON_KEY`: the project's publishable/anon key (never use a service-role key in the browser)
+
+Connect the GitHub repository `riddhika001-bit/Java-Assesment` and set the production branch to `Riddhika_mini_project`. The root [`netlify.toml`](./netlify.toml) configures the `netlify-app` build. Use HTTPS and do not store real patient or regulated health records in this educational project without a professional security and privacy review.
+
 ## Console app
 
 The original Java console app remains in `src/`. Open the repository in VS Code and run `Main.java`; configure `HOSPITAL_DB_USER` and `HOSPITAL_DB_PASSWORD` first. Add MySQL Connector/J to `lib/` if you want to run the console app.

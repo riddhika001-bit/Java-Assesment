@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8fc">
+    <meta name="description" content="A private hospital staff dashboard for patient and treatment queue management.">
+    <title>CarePoint | Hospital Management</title>
+  </head>
+  <body>
+    <main class="auth-page" id="auth-view">
+      <form class="auth-card" id="login-form">
+        <a class="brand" href="/">
+          <span class="brand-mark">+</span>
+          <span>CarePoint<small>HOSPITAL MANAGEMENT</small></span>
+        </a>
+        <p class="eyebrow">STAFF ACCESS</p>
+        <h1>Welcome back</h1>
+        <p class="subtitle">Sign in with an account invited by your Supabase project administrator.</p>
+        <label>Email
+          <input id="email" type="email" autocomplete="username" required>
+        </label>
+        <label>Password
+          <input id="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="button primary full-width" type="submit">Sign in</button>
+        <p class="notice error" id="auth-error" role="alert" hidden></p>
+        <p class="setup-hint" id="config-hint" hidden>Site setup is incomplete. Ask the administrator to configure the Supabase URL and public anon key in Netlify site environment variables, then redeploy.</p>
+      </form>
+    </main>
+
+    <div id="app-view" hidden>
+      <header class="topbar">
+        <a class="brand" href="#">
+          <span class="brand-mark">+</span>
+          <span>CarePoint<small>HOSPITAL MANAGEMENT</small></span>
+        </a>
+        <div class="top-actions">
+          <span class="staff-email" id="staff-email"></span>
+          <button class="button secondary" id="sign-out" type="button">Sign out</button>
+        </div>
+      </header>
+      <main class="page">
+        <section class="welcome">
+          <div>
+            <p class="eyebrow">HOSPITAL OVERVIEW</p>
+            <h1>Good care starts here.</h1>
+            <p class="subtitle">Manage patient records, treatment priority, and doctor workloads.</p>
+          </div>
+          <a class="button primary" href="#add-patient">+ Add patient</a>
+        </section>
+        <div class="notice success" id="success-message" role="status" hidden></div>
+        <div class="notice error" id="page-error" role="alert" hidden></div>
+
+        <section class="stats" aria-label="Hospital statistics">
+          <article class="stat-card"><span class="stat-icon blue">P</span><div><p>Total patients</p><strong id="patient-count">0</strong></div></article>
+          <article class="stat-card"><span class="stat-icon red">!</span><div><p>Critical patients</p><strong id="critical-count">0</strong></div></article>
+          <article class="stat-card"><span class="stat-icon green">+</span><div><p>Doctors on roster</p><strong id="doctor-count">0</strong></div></article>
+          <article class="stat-card"><span class="stat-icon violet">Q</span><div><p>Waiting for treatment</p><strong id="queue-count">0</strong></div></article>
+        </section>
+
+        <section class="panel" id="add-patient">
+          <div class="section-heading"><div><p class="eyebrow">PATIENT REGISTRATION</p><h2>Add a patient</h2></div></div>
+          <form class="patient-form" id="patient-form">
+            <label>Patient name<input name="name" maxlength="50" placeholder="e.g. Asha Patel" required></label>
+            <label>Age<input name="age" type="number" min="1" max="119" placeholder="Age" required></label>
+            <label>Disease / condition<input name="disease" maxlength="50" placeholder="e.g. chest pain" required></label>
+            <label>Severity<select name="severity"><option value="1">Critical</option><option value="2">Moderate</option><option value="3" selected>Normal</option></select></label>
+            <button class="button primary form-button" type="submit">Register patient</button>
+          </form>
+        </section>
+
+        <section class="panel" id="patients">
+          <div class="section-heading">
+            <div><p class="eyebrow">SHARED STAFF RECORDS</p><h2>Patients</h2></div>
+            <div class="search-form"><label class="sr-only" for="search">Search patients</label><input id="search" type="search" placeholder="Search name or condition"><button class="button secondary" id="sort-button" type="button">Sort by name</button></div>
+          </div>
+          <div class="table-wrap">
+            <table><thead><tr><th>ID</th><th>Patient</th><th>Age</th><th>Condition</th><th>Severity</th><th>Actions</th></tr></thead>
+              <tbody id="patients-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="lower-grid">
+          <section class="panel" id="treatment-queue">
+            <div class="section-heading"><div><p class="eyebrow">PRIORITY CARE</p><h2>Treatment queue</h2></div><button class="button primary" id="treat-next" type="button">Treat next patient</button></div>
+            <p class="helper">Critical cases are shown first.</p>
+            <ol class="queue-list" id="queue-list"></ol>
+          </section>
+          <section class="panel" id="doctors">
+            <div class="section-heading"><div><p class="eyebrow">CARE TEAM</p><h2>Doctors &amp; workload</h2></div></div>
+            <div class="doctor-list" id="doctor-list"></div>
+          </section>
+        </section>
+        <section class="undo-row"><span>Discharged the wrong patient?</span><button class="text-button" id="undo-discharge" type="button">Undo last discharge</button></section>
+      </main>
+      <footer>CarePoint Hospital Management <span>•</span> Patient care, organized.</footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

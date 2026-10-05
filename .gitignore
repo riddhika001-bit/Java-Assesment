@@ -3,4 +3,6 @@ bin/
 webapp/target/
 webapp/data/
 webapp/.local-login
+netlify-app/node_modules/
+netlify-app/dist/
 .env
